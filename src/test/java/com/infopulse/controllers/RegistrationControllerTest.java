@@ -20,7 +20,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.*;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -52,7 +52,10 @@ public class RegistrationControllerTest {
     private static final String testTenant = "chat";
 
     public static final KeycloakSecurityContext SECURITY_CONTEXT_WILCO =
-            new KeycloakSecurityContext(StringUtils.EMPTY, createAccessToken(testTenant) ,StringUtils.EMPTY, null);
+            new KeycloakSecurityContext(StringUtils.EMPTY,
+                                        createAccessToken(testTenant) ,
+                                        StringUtils.EMPTY,
+                                       null);
 
     private static AccessToken createAccessToken(String tenantId){
         AccessToken accessToken =new AccessToken();
@@ -103,13 +106,12 @@ public class RegistrationControllerTest {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        MockHttpServletRequestBuilder msb = post(url)
-                .content(mapper.writeValueAsString(chatUserDto))
-                .contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder msb = post(url).content(mapper.writeValueAsString(chatUserDto))
+                                                     .contentType(MediaType.APPLICATION_JSON);
 
         MockMvc mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .defaultRequest(get("/"))
-                .build();
+                                     .defaultRequest(get("/"))
+                                     .build();
 
         ResultActions resultActions = mvc.perform(msb);
 
@@ -159,11 +161,5 @@ public class RegistrationControllerTest {
                 .andExpect(jsonPath("$.[1].name", is("testuser11")))
                 .andExpect(jsonPath("$.[1].login", is("chatuserLogin11")))
                 .andExpect(jsonPath("$", hasSize(2)));
-
-
     }
-
-
-
-
 }

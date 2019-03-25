@@ -19,9 +19,11 @@ public class ChatUserDataService {
 
     @Transactional
     public ChatUser saveUser(ChatUser chatUser){
+
         ChatUser newChatUser = chatUserRepository.findByLogin(chatUser.getLogin());
+
         if(newChatUser != null){
-            throw new UserAlreadyExist(String.format("User with login %s already exist",chatUser.getLogin()));
+            throw new UserAlreadyExist(String.format("User with login %s already exist", chatUser.getLogin()));
         }
 
         return chatUserRepository.save(chatUser);
